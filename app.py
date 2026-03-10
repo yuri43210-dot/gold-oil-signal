@@ -1,3 +1,4 @@
+import os
 import requests
 from flask import Flask, jsonify, render_template
 
@@ -8,12 +9,25 @@ SYMBOLS = {
     "oil": "CL=F"
 }
 
+HEADERS = {
+    "User-Agent": "Mozilla/5.0"
+}
+
 def get_price(symbol):
-    url = f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={symbol}"
-    r = requests.get(url)
-    data = r.json()
-    price = data["quoteResponse"]["result"][0]["regularMarketPrice"]
-    return price
+    try:
+        url = f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={symbol}"
+        r = requests.get(url, headers=HEADERS, timeout=10)
+        r.raise_for_status()
+        data = r.json()
+
+        results = data.get("quoteResponse", {}).get("result", [])
+        if not results:
+            return None
+
+        return results[0].get("regularMarketPrice")
+    except Exception as e:
+        print(f"get_price error for {symbol}: {e}")
+        return None
 
 @app.route("/")
 def index():
@@ -33,9 +47,6 @@ def signals():
         "oil": oil
     })
 
-import os
-
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
     app.run(host="0.0.0.0", port=port)
-
