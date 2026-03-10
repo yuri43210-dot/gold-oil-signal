@@ -1,58 +1,59 @@
 import os
-import requests
-from flask import Flask, jsonify, render_template
-
-app = Flask(__name__)
-
-SYMBOLS = {
-    "gold": "GC=F",
-    "oil": "CL=F"
-}
-
-HEADERS = {
-    "User-Agent": "Mozilla/5.0"
-}
-
-def get_price(symbol):
-    try:
-        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
-        params = {
-            "interval": "1m",
-            "range": "1d"
+            "change_pct": change_pct,
+            "summary": "전일 종가 대비 변동폭이 크지 않아 관망 구간입니다."
         }
-        r = requests.get(url, headers=HEADERS, params=params, timeout=10)
-        r.raise_for_status()
-        data = r.json()
 
-        result = data.get("chart", {}).get("result", [])
-        if not result:
-            return None
 
-        meta = result[0].get("meta", {})
-        price = meta.get("regularMarketPrice")
+def build_item(name: str, symbol: str):
+    meta = fetch_chart_meta(symbol)
+    if not meta:
+        return {
+            "name": name,
+            "symbol": symbol,
+            "price": None,
+            "previous_close": None,
+            "signal": "데이터 없음",
+            "badge": "neutral",
+            "change_pct": None,
+            "currency": None,
+            "summary": "가격 정보를 불러오지 못했습니다."
+        }
 
-        return price
-    except Exception as e:
-        print(f"get_price error for {symbol}: {e}")
-        return None
+    price = meta.get("regularMarketPrice")
+    previous_close = meta.get("chartPreviousClose") or meta.get("previousClose")
+    currency = meta.get("currency")
+
+    signal_info = classify_signal(price, previous_close)
+
+    return {
+        "name": name,
+        "symbol": symbol,
+        "price": price,
+        "previous_close": previous_close,
+        "currency": currency,
+        **signal_info
+    }
+
 
 @app.route("/")
 def index():
     return render_template("signal-page.html")
 
+
 @app.route("/widget")
 def widget():
     return render_template("mini-widget.html")
 
+
 @app.route("/api/signals")
 def signals():
-    gold = get_price(SYMBOLS["gold"])
-    oil = get_price(SYMBOLS["oil"])
-
     return jsonify({
-        "gold": gold,
-        "oil": oil
+        "gold": build_item("금", SYMBOLS["gold"]),
+        "oil": build_item("원유", SYMBOLS["oil"]),
+        "silver": build_item("은", SYMBOLS["silver"]),
+        "dxy": build_item("달러지수", SYMBOLS["dxy"])
     })
+
 
 if __name__ == "__main__":
     port = int(os.environ.get("PORT", 10000))
