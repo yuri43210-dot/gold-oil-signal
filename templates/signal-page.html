@@ -1,33 +1,60 @@
 <!DOCTYPE html>
-<html>
+<html lang="ko">
 <head>
   <meta charset="utf-8">
-  <title>금 / 원유 실시간 가격</title>
-</head>
-<body>
-  <h1>금 / 원유 실시간 가격</h1>
-
-  <div id="gold">금 가격 : 불러오는 중...</div>
-  <div id="oil">원유 가격 : 불러오는 중...</div>
-
-  <script>
-    async function load() {
-      try {
-        const r = await fetch('/api/signals');
-        const d = await r.json();
-
-        document.getElementById("gold").innerHTML =
-          "금 가격 : " + (d.gold ?? "데이터 없음");
-        document.getElementById("oil").innerHTML =
-          "원유 가격 : " + (d.oil ?? "데이터 없음");
-      } catch (e) {
-        document.getElementById("gold").innerHTML = "금 가격 : 불러오기 실패";
-        document.getElementById("oil").innerHTML = "원유 가격 : 불러오기 실패";
-      }
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>금·원유·은·달러지수 실시간 신호</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
     }
-
-    load();
-    setInterval(load, 60000);
-  </script>
-</body>
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 20px 60px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+    }
+    .sub {
+      color: #94a3b8;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 14px 28px rgba(0,0,0,.22);
+    }
+    .name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .symbol {
+      color: #94a3b8;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .price {
+      font-size: 34px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .pill {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
 </html>
