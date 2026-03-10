@@ -1,60 +1,74 @@
 <!DOCTYPE html>
-<html lang="ko">
-<head>
-  <meta charset="utf-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>금·원유·은·달러지수 실시간 신호</title>
-  <style>
-    * { box-sizing: border-box; }
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #0f172a;
-      color: #e5e7eb;
-    }
-    .wrap {
-      max-width: 1180px;
-      margin: 0 auto;
-      padding: 36px 20px 60px;
-    }
-    h1 {
-      margin: 0 0 10px;
-      font-size: 34px;
-    }
-    .sub {
-      color: #94a3b8;
-      margin-bottom: 24px;
+    .meta {
+      color: #cbd5e1;
+      font-size: 14px;
       line-height: 1.6;
     }
-    .grid {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
-      gap: 18px;
+    .summary {
+      color: #94a3b8;
+      margin-top: 10px;
+      font-size: 14px;
+      line-height: 1.6;
     }
-    .card {
-      background: #111827;
-      border: 1px solid #1f2937;
-      border-radius: 18px;
-      padding: 20px;
-      box-shadow: 0 14px 28px rgba(0,0,0,.22);
-    }
-    .name {
-      font-size: 22px;
-      font-weight: 700;
-      margin-bottom: 8px;
-    }
-    .symbol {
+    .foot {
+      margin-top: 28px;
       color: #94a3b8;
       font-size: 13px;
-      margin-bottom: 14px;
+      line-height: 1.7;
     }
-    .price {
-      font-size: 34px;
-      font-weight: 700;
-      margin-bottom: 8px;
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>금·원유·은·달러지수 실시간 신호</h1>
+    <div class="sub">
+      Yahoo Finance 기반 실시간 데이터와 전일 종가 대비 변동률로 단기 방향을 보여주는 참고용 페이지입니다.
+    </div>
+
+    <div class="grid" id="grid"></div>
+
+    <div class="foot">
+      본 페이지는 투자 참고용 정보이며, 매수·매도 추천이 아닙니다. 무료 서버는 일정 시간 비활성 시 재가동 시간이 걸릴 수 있습니다.
+    </div>
+  </div>
+
+  <script>
+    function num(v) {
+      if (v === null || v === undefined) return '데이터 없음';
+      return new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 }).format(v);
     }
-    .pill {
-      display: inline-block;
-      padding: 7px 12px;
-      border-radius: 999px;
+
+    function renderCard(item) {
+      return `
+        <div class="card">
+          <div class="name">${item.name}</div>
+          <div class="symbol">${item.symbol}</div>
+          <div class="pill ${item.badge}">${item.signal}</div>
+          <div class="price">${num(item.price)}</div>
+          <div class="meta">
+            전일 종가: ${num(item.previous_close)}<br>
+            변동률: ${item.change_pct === null ? '데이터 없음' : item.change_pct + '%'}<br>
+            통화: ${item.currency ?? 'N/A'}
+          </div>
+          <div class="summary">${item.summary}</div>
+        </div>
+      `;
+    }
+
+    async function load() {
+      try {
+        const r = await fetch('/api/signals');
+        const d = await r.json();
+
+        const items = [d.gold, d.oil, d.silver, d.dxy];
+        document.getElementById('grid').innerHTML = items.map(renderCard).join('');
+      } catch (e) {
+        document.getElementById('grid').innerHTML = '<div class="card">데이터를 불러오지 못했습니다.</div>';
+      }
+    }
+
+    load();
+    setInterval(load, 60000);
+  </script>
+</body>
 </html>
