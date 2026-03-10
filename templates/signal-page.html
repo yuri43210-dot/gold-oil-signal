@@ -1,28 +1,33 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="utf-8">
-<title>금 원유 실시간 가격</title>
+  <meta charset="utf-8">
+  <title>금 / 원유 실시간 가격</title>
 </head>
 <body>
+  <h1>금 / 원유 실시간 가격</h1>
 
-<h1>금 / 원유 실시간 가격</h1>
+  <div id="gold">금 가격 : 불러오는 중...</div>
+  <div id="oil">원유 가격 : 불러오는 중...</div>
 
-<div id="gold"></div>
-<div id="oil"></div>
+  <script>
+    async function load() {
+      try {
+        const r = await fetch('/api/signals');
+        const d = await r.json();
 
-<script>
-async function load(){
-let r = await fetch('https://gold-oil-signal.onrender.com/api/signals')
-let d = await r.json()
+        document.getElementById("gold").innerHTML =
+          "금 가격 : " + (d.gold ?? "데이터 없음");
+        document.getElementById("oil").innerHTML =
+          "원유 가격 : " + (d.oil ?? "데이터 없음");
+      } catch (e) {
+        document.getElementById("gold").innerHTML = "금 가격 : 불러오기 실패";
+        document.getElementById("oil").innerHTML = "원유 가격 : 불러오기 실패";
+      }
+    }
 
-document.getElementById("gold").innerHTML="금 가격 : "+d.gold
-document.getElementById("oil").innerHTML="원유 가격 : "+d.oil
-}
-
-load()
-setInterval(load,60000)
-</script>
-
+    load();
+    setInterval(load, 60000);
+  </script>
 </body>
 </html>
