@@ -1,4 +1,69 @@
 <!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>금·원유·은·달러지수 실시간 신호</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #0f172a;
+      color: #e5e7eb;
+    }
+    .wrap {
+      max-width: 1180px;
+      margin: 0 auto;
+      padding: 36px 20px 60px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+    }
+    .sub {
+      color: #94a3b8;
+      margin-bottom: 24px;
+      line-height: 1.6;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: #111827;
+      border: 1px solid #1f2937;
+      border-radius: 18px;
+      padding: 20px;
+      box-shadow: 0 14px 28px rgba(0,0,0,.22);
+    }
+    .name {
+      font-size: 22px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .symbol {
+      color: #94a3b8;
+      font-size: 13px;
+      margin-bottom: 14px;
+    }
+    .price {
+      font-size: 34px;
+      font-weight: 700;
+      margin-bottom: 8px;
+    }
+    .pill {
+      display: inline-block;
+      padding: 7px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 12px;
+    }
+    .bull { background: rgba(34,197,94,.15); color: #4ade80; }
+    .bear { background: rgba(239,68,68,.15); color: #f87171; }
+    .neutral { background: rgba(148,163,184,.15); color: #cbd5e1; }
     .meta {
       color: #cbd5e1;
       font-size: 14px;
