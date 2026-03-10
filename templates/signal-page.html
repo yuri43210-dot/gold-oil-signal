@@ -13,7 +13,7 @@
 
 <script>
 async function load(){
-let r = await fetch('/api/signals')
+let r = await fetch('https://gold-oil-signal.onrender.com/api/signals')
 let d = await r.json()
 
 document.getElementById("gold").innerHTML="금 가격 : "+d.gold
