@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<body>
+
+<div id="gold"></div>
+<div id="oil"></div>
+
+<script>
+async function load(){
+let r = await fetch('/api/signals')
+let d = await r.json()
+
+document.getElementById("gold").innerHTML="금 : "+d.gold
+document.getElementById("oil").innerHTML="원유 : "+d.oil
+}
+
+load()
+setInterval(load,60000)
+</script>
+
+</body>
+</html>
