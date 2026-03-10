@@ -15,16 +15,23 @@ HEADERS = {
 
 def get_price(symbol):
     try:
-        url = f"https://query1.finance.yahoo.com/v7/finance/quote?symbols={symbol}"
-        r = requests.get(url, headers=HEADERS, timeout=10)
+        url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
+        params = {
+            "interval": "1m",
+            "range": "1d"
+        }
+        r = requests.get(url, headers=HEADERS, params=params, timeout=10)
         r.raise_for_status()
         data = r.json()
 
-        results = data.get("quoteResponse", {}).get("result", [])
-        if not results:
+        result = data.get("chart", {}).get("result", [])
+        if not result:
             return None
 
-        return results[0].get("regularMarketPrice")
+        meta = result[0].get("meta", {})
+        price = meta.get("regularMarketPrice")
+
+        return price
     except Exception as e:
         print(f"get_price error for {symbol}: {e}")
         return None
