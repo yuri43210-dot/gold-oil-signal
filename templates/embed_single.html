@@ -6,6 +6,7 @@
   <title>{{ item.name }} 임베드</title>
   <style>
     * { box-sizing: border-box; }
+
     html, body {
       margin: 0;
       padding: 0;
@@ -14,12 +15,13 @@
       color: #e5e7eb;
       overflow: hidden;
     }
+
     .wrap {
       width: 100%;
-      max-width: none;
       margin: 0;
       padding: 0;
     }
+
     .card {
       width: 100%;
       background: #0a1837;
@@ -28,6 +30,7 @@
       padding: 14px;
       box-shadow: 0 10px 22px rgba(0,0,0,.16);
     }
+
     .top {
       display: flex;
       justify-content: space-between;
@@ -35,15 +38,18 @@
       gap: 8px;
       margin-bottom: 8px;
     }
+
     .name {
       font-size: 20px;
       font-weight: 800;
       margin-bottom: 2px;
     }
+
     .symbol {
       font-size: 13px;
       color: #b7c4dd;
     }
+
     .pill {
       display: inline-block;
       padding: 7px 10px;
@@ -52,50 +58,77 @@
       font-weight: 700;
       white-space: nowrap;
     }
+
     .bull { background: rgba(34,197,94,.16); color: #6ee7b7; }
     .bear { background: rgba(239,68,68,.16); color: #fda4af; }
     .neutral { background: rgba(148,163,184,.15); color: #dbe4f3; }
+
     .price {
       font-size: 30px;
       font-weight: 800;
       margin: 6px 0 2px;
       line-height: 1.1;
     }
+
     .change {
       color: #dbe4f3;
       font-size: 13px;
       margin-bottom: 10px;
     }
+
     .chartbox {
-      margin: 8px 0 10px;
+      margin: 10px 0 12px;
       background: #091226;
       border: 1px solid rgba(255,255,255,.08);
       border-radius: 14px;
-      padding: 7px;
+      padding: 8px;
     }
+
     .chartlabel {
       color: #a3b4d3;
       font-size: 11px;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
+
+    .chart-inner {
+      border-radius: 10px;
+      overflow: hidden;
+      background: rgba(255,255,255,.03);
+    }
+
     svg {
       width: 100%;
-      height: 50px;
+      height: 58px;
       display: block;
     }
+
+    .chart-bg-bull {
+      fill: rgba(16, 185, 129, 0.14);
+    }
+
+    .chart-bg-bear {
+      fill: rgba(244, 114, 182, 0.12);
+    }
+
+    .chart-bg-neutral {
+      fill: rgba(148, 163, 184, 0.12);
+    }
+
     polyline {
       fill: none;
       stroke: currentColor;
-      stroke-width: 2.5;
+      stroke-width: 2.8;
       stroke-linecap: round;
       stroke-linejoin: round;
     }
+
     .analysis {
       font-size: 13px;
       line-height: 1.6;
       color: #eef3ff;
       margin-bottom: 8px;
     }
+
     .meta {
       color: #b7c4dd;
       font-size: 12px;
@@ -119,13 +152,22 @@
 
       <div class="chartbox">
         <div class="chartlabel">최근 24구간 차트</div>
-        {% if item.sparkline %}
-        <svg viewBox="0 0 220 56" class="{{ item.badge }}">
-          <polyline points="{{ item.sparkline }}"></polyline>
-        </svg>
-        {% else %}
-        <div class="meta">차트 데이터 없음</div>
-        {% endif %}
+        <div class="chart-inner">
+          {% if item.sparkline %}
+          <svg viewBox="0 0 220 56" preserveAspectRatio="none" class="{{ item.badge }}">
+            {% if item.badge == 'bull' %}
+              <rect x="0" y="0" width="220" height="56" class="chart-bg-bull"></rect>
+            {% elif item.badge == 'bear' %}
+              <rect x="0" y="0" width="220" height="56" class="chart-bg-bear"></rect>
+            {% else %}
+              <rect x="0" y="0" width="220" height="56" class="chart-bg-neutral"></rect>
+            {% endif %}
+            <polyline points="{{ item.sparkline }}"></polyline>
+          </svg>
+          {% else %}
+          <div class="meta" style="padding:12px;">차트 데이터 없음</div>
+          {% endif %}
+        </div>
       </div>
 
       <div class="analysis">{{ item.analysis }}</div>
