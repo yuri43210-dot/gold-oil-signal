@@ -3,7 +3,7 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>금·원유·은·달러지수 실시간 신호</title>
+  <title>금·원유·은·달러지수 실시간 차트/신호</title>
   <style>
     * { box-sizing: border-box; }
     body {
@@ -13,7 +13,7 @@
       color: #e5e7eb;
     }
     .wrap {
-      max-width: 1180px;
+      max-width: 1240px;
       margin: 0 auto;
       padding: 36px 20px 60px;
     }
@@ -24,34 +24,35 @@
     .sub {
       color: #94a3b8;
       margin-bottom: 24px;
-      line-height: 1.6;
+      line-height: 1.7;
     }
     .grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
       gap: 18px;
     }
     .card {
       background: #111827;
       border: 1px solid #1f2937;
-      border-radius: 18px;
+      border-radius: 20px;
       padding: 20px;
       box-shadow: 0 14px 28px rgba(0,0,0,.22);
+    }
+    .top {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 10px;
+      margin-bottom: 12px;
     }
     .name {
       font-size: 22px;
       font-weight: 700;
-      margin-bottom: 8px;
+      margin-bottom: 5px;
     }
     .symbol {
       color: #94a3b8;
       font-size: 13px;
-      margin-bottom: 14px;
-    }
-    .price {
-      font-size: 34px;
-      font-weight: 700;
-      margin-bottom: 8px;
     }
     .pill {
       display: inline-block;
@@ -59,21 +60,56 @@
       border-radius: 999px;
       font-size: 13px;
       font-weight: 700;
-      margin-bottom: 12px;
+      white-space: nowrap;
     }
     .bull { background: rgba(34,197,94,.15); color: #4ade80; }
     .bear { background: rgba(239,68,68,.15); color: #f87171; }
     .neutral { background: rgba(148,163,184,.15); color: #cbd5e1; }
-    .meta {
+    .price {
+      font-size: 34px;
+      font-weight: 700;
+      margin: 8px 0 6px;
+    }
+    .change {
+      font-size: 14px;
+      margin-bottom: 14px;
+      color: #cbd5e1;
+    }
+    .analysis {
       color: #cbd5e1;
       font-size: 14px;
-      line-height: 1.6;
+      line-height: 1.7;
+      margin-top: 14px;
     }
-    .summary {
+    .meta {
       color: #94a3b8;
+      font-size: 13px;
+      line-height: 1.7;
       margin-top: 10px;
-      font-size: 14px;
-      line-height: 1.6;
+    }
+    .chartbox {
+      margin-top: 8px;
+      background: #0b1220;
+      border: 1px solid #1e293b;
+      border-radius: 14px;
+      padding: 8px;
+    }
+    .chartlabel {
+      color: #94a3b8;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    svg {
+      width: 100%;
+      height: 56px;
+      display: block;
+    }
+    polyline {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
     }
     .foot {
       margin-top: 28px;
@@ -85,15 +121,13 @@
 </head>
 <body>
   <div class="wrap">
-    <h1>금·원유·은·달러지수 실시간 신호</h1>
+    <h1>금·원유·은·달러지수 실시간 차트/신호</h1>
     <div class="sub">
-      Yahoo Finance 기반 실시간 데이터와 전일 종가 대비 변동률로 단기 방향을 보여주는 참고용 페이지입니다.
+      최근 가격 흐름을 스파크라인 차트로 보여주고, 전일 종가 대비 변동률을 기준으로 자동 분석 문구와 상승/하락 신호를 제공합니다.
     </div>
-
     <div class="grid" id="grid"></div>
-
     <div class="foot">
-      본 페이지는 투자 참고용 정보이며, 매수·매도 추천이 아닙니다. 무료 서버는 일정 시간 비활성 시 재가동 시간이 걸릴 수 있습니다.
+      본 페이지는 참고용 정보입니다. 무료 Render 서버 특성상 첫 접속 시 로딩이 약간 느릴 수 있습니다.
     </div>
   </div>
 
@@ -103,19 +137,46 @@
       return new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 }).format(v);
     }
 
+    function changeText(v) {
+      if (v === null || v === undefined) return '데이터 없음';
+      return (v > 0 ? '+' : '') + v + '%';
+    }
+
+    function renderChart(item) {
+      if (!item.sparkline) {
+        return '<div class="chartbox"><div class="chartlabel">최근 24구간 차트</div><div class="meta">차트 데이터 없음</div></div>';
+      }
+      return `
+        <div class="chartbox">
+          <div class="chartlabel">최근 24구간 차트</div>
+          <svg viewBox="0 0 220 56" class="${item.badge}">
+            <polyline points="${item.sparkline}"></polyline>
+          </svg>
+        </div>
+      `;
+    }
+
     function renderCard(item) {
       return `
         <div class="card">
-          <div class="name">${item.name}</div>
-          <div class="symbol">${item.symbol}</div>
-          <div class="pill ${item.badge}">${item.signal}</div>
+          <div class="top">
+            <div>
+              <div class="name">${item.name}</div>
+              <div class="symbol">${item.symbol}</div>
+            </div>
+            <div class="pill ${item.badge}">${item.signal}</div>
+          </div>
+
           <div class="price">${num(item.price)}</div>
+          <div class="change">변동률: ${changeText(item.change_pct)}</div>
+
+          ${renderChart(item)}
+
+          <div class="analysis">${item.analysis}</div>
           <div class="meta">
             전일 종가: ${num(item.previous_close)}<br>
-            변동률: ${item.change_pct === null ? '데이터 없음' : item.change_pct + '%'}<br>
             통화: ${item.currency ?? 'N/A'}
           </div>
-          <div class="summary">${item.summary}</div>
         </div>
       `;
     }
@@ -124,7 +185,6 @@
       try {
         const r = await fetch('/api/signals');
         const d = await r.json();
-
         const items = [d.gold, d.oil, d.silver, d.dxy];
         document.getElementById('grid').innerHTML = items.map(renderCard).join('');
       } catch (e) {
