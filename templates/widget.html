@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #111827;
+      color: #e5e7eb;
+    }
+    .widget {
+      padding: 14px;
+      border-radius: 16px;
+      background: #111827;
+      border: 1px solid #1f2937;
+    }
+    .title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 10px;
+    }
+    .row {
+      display: flex;
+      justify-content: space-between;
+      gap: 10px;
+      padding: 8px 0;
+      border-bottom: 1px solid #1f2937;
+      font-size: 13px;
+      align-items: center;
+    }
+    .row:last-child { border-bottom: 0; }
+    .left {
+      min-width: 66px;
+      color: #cbd5e1;
+      font-weight: 700;
+    }
+    .mid {
+      flex: 1;
+      color: #cbd5e1;
+      text-align: right;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+    }
+    .right {
+      min-width: 74px;
+      text-align: right;
+      font-weight: 700;
+    }
+    .bull { color: #4ade80; }
+    .bear { color: #f87171; }
+    .neutral { color: #cbd5e1; }
+    .bottom {
+      margin-top: 10px;
+      font-size: 12px;
+      color: #94a3b8;
+    }
+    a {
+      color: #93c5fd;
+      text-decoration: none;
+    }
+  </style>
+</head>
+<body>
+  <div class="widget">
+    <div class="title">실시간 원자재/달러 신호</div>
+    <div id="rows">불러오는 중...</div>
+    <div class="bottom">
+      자세히 보기: <a href="/" target="_blank">전체 신호 페이지</a>
+    </div>
+  </div>
+
+  <script>
+    function num(v) {
+      if (v === null || v === undefined) return 'N/A';
+      return new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 }).format(v);
+    }
+
+    function row(item) {
+      return `
+        <div class="row">
+          <div class="left">${item.name}</div>
+          <div class="mid">${num(item.price)}</div>
+          <div class="right ${item.badge}">${item.signal}</div>
+        </div>
+      `;
+    }
+
+    async function load() {
+      try {
+        const r = await fetch('/api/signals');
+        const d = await r.json();
+        const items = [d.gold, d.oil, d.silver, d.dxy];
+        document.getElementById('rows').innerHTML = items.map(row).join('');
+      } catch (e) {
+        document.getElementById('rows').innerHTML = '데이터를 불러오지 못했습니다.';
+      }
+    }
+
+    load();
+    setInterval(load, 60000);
+  </script>
+</body>
+</html>
