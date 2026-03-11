@@ -1,6 +1,6 @@
 import os
 import requests
-from flask import Flask, jsonify, render_template
+from flask import Flask, jsonify, render_template, abort
 
 app = Flask(__name__)
 
@@ -233,7 +233,6 @@ def build_item(item_key: str, name: str, symbol: str, slug: str):
     signal_info = classify_signal(change_pct_value)
     recent_trend = get_recent_trend(last_24)
     analysis = auto_analysis(name, price, previous_close, change_pct_value, recent_trend)
-    sparkline = build_sparkline_points(last_24)
 
     return {
         "name": name,
@@ -244,7 +243,7 @@ def build_item(item_key: str, name: str, symbol: str, slug: str):
         "currency": currency,
         "change_pct": change_pct_value,
         "analysis": analysis,
-        "sparkline": sparkline,
+        "sparkline": build_sparkline_points(last_24),
         "cta": get_cta(item_key, signal_info["signal"]),
         "asset_cta": get_asset_cta(item_key, signal_info["signal"]),
         **signal_info,
@@ -292,9 +291,16 @@ def widget():
     return render_template("widget.html")
 
 
-@app.route("/embed")
-def embed():
-    return render_template("embed.html")
+@app.route("/embed/<asset_key>")
+def embed_single(asset_key):
+    items = all_items()
+    if asset_key == "dollar":
+        item = items["dxy"]
+    elif asset_key in items:
+        item = items[asset_key]
+    else:
+        abort(404)
+    return render_template("embed_single.html", item=item)
 
 
 @app.route("/api/signals")
