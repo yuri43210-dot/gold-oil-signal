@@ -16,6 +16,14 @@ HEADERS = {
 }
 
 
+@app.after_request
+def add_cors_headers(response):
+    response.headers["Access-Control-Allow-Origin"] = "*"
+    response.headers["Access-Control-Allow-Headers"] = "Content-Type"
+    response.headers["Access-Control-Allow-Methods"] = "GET, OPTIONS"
+    return response
+
+
 def fetch_chart(symbol: str, interval: str = "5m", range_: str = "1d"):
     try:
         url = f"https://query1.finance.yahoo.com/v8/finance/chart/{symbol}"
@@ -90,10 +98,10 @@ def get_recent_trend(values):
 
 
 def auto_analysis(name, price, previous_close, change_pct_value, recent_trend):
-    if price is None or previous_close is None:
+    if price is None or previous_close is None or change_pct_value is None:
         return f"{name} 데이터가 충분하지 않아 자동 분석을 제공할 수 없습니다."
 
-    direction_text = "상승" if (change_pct_value or 0) > 0 else "하락" if (change_pct_value or 0) < 0 else "보합"
+    direction_text = "상승" if change_pct_value > 0 else "하락" if change_pct_value < 0 else "보합"
 
     if recent_trend == "up":
         trend_text = "최근 구간 차트도 우상향 흐름을 보여 단기 모멘텀이 유지되고 있습니다."
