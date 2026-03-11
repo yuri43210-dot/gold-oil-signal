@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{{ title }}</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #081734;
+      color: #eef3ff;
+    }
+    .wrap {
+      max-width: 1100px;
+      margin: 0 auto;
+      padding: 34px 20px 60px;
+    }
+    .back {
+      display: inline-block;
+      margin-bottom: 16px;
+      color: #93c5fd;
+      text-decoration: none;
+      font-size: 14px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      line-height: 1.3;
+    }
+    .intro {
+      color: #c6d2ea;
+      line-height: 1.8;
+      margin-bottom: 24px;
+    }
+    .hero {
+      background: #0a1837;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 22px;
+      padding: 22px;
+      margin-bottom: 20px;
+    }
+    .pill {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 14px;
+    }
+    .bull { background: rgba(34,197,94,.16); color: #6ee7b7; }
+    .bear { background: rgba(239,68,68,.16); color: #fda4af; }
+    .neutral { background: rgba(148,163,184,.15); color: #dbe4f3; }
+    .price {
+      font-size: 36px;
+      font-weight: 800;
+      margin-bottom: 6px;
+    }
+    .meta {
+      color: #b7c4dd;
+      line-height: 1.8;
+      font-size: 14px;
+    }
+    .analysis {
+      margin-top: 14px;
+      font-size: 16px;
+      line-height: 1.8;
+      color: #eef3ff;
+    }
+    .content {
+      display: grid;
+      grid-template-columns: 1.5fr .9fr;
+      gap: 18px;
+    }
+    .box {
+      background: #0a1837;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 20px;
+      padding: 22px;
+    }
+    h2 {
+      margin: 0 0 14px;
+      font-size: 24px;
+    }
+    .section {
+      margin-bottom: 16px;
+      line-height: 1.9;
+      color: #d7e1f3;
+    }
+    .ad-box {
+      margin: 16px 0;
+      border: 1px dashed rgba(255,255,255,.25);
+      border-radius: 14px;
+      padding: 18px;
+      color: #c6d2ea;
+      text-align: center;
+      background: rgba(255,255,255,.03);
+    }
+    .links a {
+      display: block;
+      color: #93c5fd;
+      text-decoration: none;
+      margin-bottom: 10px;
+      line-height: 1.7;
+    }
+    .home-btn {
+      display: block;
+      text-align: center;
+      margin-top: 14px;
+      padding: 12px;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+    }
+    @media (max-width: 900px) {
+      .content { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <a class="back" href="/">← 전체 실시간 신호로 돌아가기</a>
+    <h1>{{ title }}</h1>
+    <div class="intro">{{ intro }}</div>
+
+    <div class="hero">
+      <div class="pill {{ item.badge }}">{{ item.signal }}</div>
+      <div class="price">{{ item.price }}</div>
+      <div class="meta">
+        자산: {{ item.name }} ({{ item.symbol }})<br>
+        전일 종가: {{ item.previous_close }}<br>
+        변동률: {{ item.change_pct }}%<br>
+        통화: {{ item.currency }}
+      </div>
+      <div class="analysis">{{ item.analysis }}</div>
+    </div>
+
+    <div class="content">
+      <div class="box">
+        <h2>전망 및 전략</h2>
+        {% for section in sections %}
+          <div class="section">{{ section }}</div>
+        {% endfor %}
+
+        <div class="ad-box">
+          이 영역에 전면 광고/상단 광고/중간 광고 배치를 고려할 수 있습니다.
+        </div>
+
+        <div class="section">
+          현재 {{ item.name }}의 신호가 <strong>{{ item.signal }}</strong>인 만큼, 단기 방향성만 보기보다 관련 자산, ETF, 업종 흐름까지 함께 비교하는 방식이 유리할 수 있습니다.
+        </div>
+      </div>
+
+      <div class="box">
+        <h2>관련 페이지</h2>
+        <div class="links">
+          <a href="/gold-forecast">오늘 금값 전망 보기</a>
+          <a href="/oil-forecast">오늘 국제유가 전망 보기</a>
+          <a href="/silver-strategy">은 가격 전략 보기</a>
+          <a href="/dollar-strategy">달러지수 전략 보기</a>
+        </div>
+
+        <div class="ad-box">
+          이 영역은 사이드 광고 또는 추천 글 영역으로 활용할 수 있습니다.
+        </div>
+
+        <a class="home-btn" href="/">실시간 메인 페이지 보기</a>
+      </div>
+    </div>
+  </div>
+</body>
+</html>
