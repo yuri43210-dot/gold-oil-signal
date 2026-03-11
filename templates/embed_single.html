@@ -12,40 +12,43 @@
       font-family: Arial, sans-serif;
       background: #081734;
       color: #e5e7eb;
+      overflow: hidden;
     }
     .wrap {
-      max-width: 420px;
-      margin: 0 auto;
-      padding: 10px;
+      width: 100%;
+      max-width: none;
+      margin: 0;
+      padding: 0;
     }
     .card {
+      width: 100%;
       background: #0a1837;
       border: 1px solid rgba(255,255,255,.08);
       border-radius: 20px;
-      padding: 18px;
+      padding: 14px;
       box-shadow: 0 10px 22px rgba(0,0,0,.16);
     }
     .top {
       display: flex;
       justify-content: space-between;
       align-items: flex-start;
-      gap: 10px;
-      margin-bottom: 10px;
+      gap: 8px;
+      margin-bottom: 8px;
     }
     .name {
-      font-size: 22px;
+      font-size: 20px;
       font-weight: 800;
-      margin-bottom: 4px;
+      margin-bottom: 2px;
     }
     .symbol {
-      font-size: 14px;
+      font-size: 13px;
       color: #b7c4dd;
     }
     .pill {
       display: inline-block;
-      padding: 8px 12px;
+      padding: 7px 10px;
       border-radius: 999px;
-      font-size: 13px;
+      font-size: 12px;
       font-weight: 700;
       white-space: nowrap;
     }
@@ -53,30 +56,31 @@
     .bear { background: rgba(239,68,68,.16); color: #fda4af; }
     .neutral { background: rgba(148,163,184,.15); color: #dbe4f3; }
     .price {
-      font-size: 34px;
+      font-size: 30px;
       font-weight: 800;
-      margin: 8px 0 4px;
+      margin: 6px 0 2px;
+      line-height: 1.1;
     }
     .change {
       color: #dbe4f3;
-      font-size: 14px;
-      margin-bottom: 12px;
+      font-size: 13px;
+      margin-bottom: 10px;
     }
     .chartbox {
-      margin: 10px 0 12px;
+      margin: 8px 0 10px;
       background: #091226;
       border: 1px solid rgba(255,255,255,.08);
       border-radius: 14px;
-      padding: 8px;
+      padding: 7px;
     }
     .chartlabel {
       color: #a3b4d3;
-      font-size: 12px;
-      margin-bottom: 6px;
+      font-size: 11px;
+      margin-bottom: 4px;
     }
     svg {
       width: 100%;
-      height: 54px;
+      height: 50px;
       display: block;
     }
     polyline {
@@ -87,15 +91,15 @@
       stroke-linejoin: round;
     }
     .analysis {
-      font-size: 14px;
-      line-height: 1.7;
+      font-size: 13px;
+      line-height: 1.6;
       color: #eef3ff;
-      margin-bottom: 10px;
+      margin-bottom: 8px;
     }
     .meta {
       color: #b7c4dd;
-      font-size: 13px;
-      line-height: 1.7;
+      font-size: 12px;
+      line-height: 1.55;
     }
   </style>
 </head>
