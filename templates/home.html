@@ -1,0 +1,245 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>금·원유·은·달러지수 실시간 차트/신호</title>
+  <style>
+    * { box-sizing: border-box; }
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #081734;
+      color: #e5e7eb;
+    }
+    .wrap {
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 34px 20px 60px;
+    }
+    h1 {
+      margin: 0 0 10px;
+      font-size: 34px;
+      letter-spacing: -0.5px;
+    }
+    .sub {
+      color: #9fb0cf;
+      margin-bottom: 26px;
+      line-height: 1.7;
+    }
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(285px, 1fr));
+      gap: 18px;
+    }
+    .card {
+      background: #0a1837;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 22px;
+      padding: 20px;
+      box-shadow: 0 12px 28px rgba(0,0,0,.18);
+    }
+    .top {
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-start;
+      gap: 10px;
+      margin-bottom: 10px;
+    }
+    .name {
+      font-size: 22px;
+      font-weight: 800;
+      margin-bottom: 4px;
+    }
+    .symbol {
+      font-size: 14px;
+      color: #b7c4dd;
+    }
+    .pill {
+      display: inline-block;
+      padding: 8px 12px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .bull { background: rgba(34,197,94,.16); color: #6ee7b7; }
+    .bear { background: rgba(239,68,68,.16); color: #fda4af; }
+    .neutral { background: rgba(148,163,184,.15); color: #dbe4f3; }
+    .price {
+      font-size: 34px;
+      font-weight: 800;
+      margin: 8px 0 4px;
+    }
+    .change {
+      color: #dbe4f3;
+      font-size: 14px;
+      margin-bottom: 14px;
+    }
+    .chartbox {
+      margin: 12px 0 14px;
+      background: #091226;
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding: 8px;
+    }
+    .chartlabel {
+      color: #a3b4d3;
+      font-size: 12px;
+      margin-bottom: 6px;
+    }
+    svg {
+      width: 100%;
+      height: 56px;
+      display: block;
+    }
+    polyline {
+      fill: none;
+      stroke: currentColor;
+      stroke-width: 2.5;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .analysis {
+      font-size: 15px;
+      line-height: 1.75;
+      color: #eef3ff;
+      margin-bottom: 12px;
+    }
+    .meta {
+      color: #b7c4dd;
+      font-size: 13px;
+      line-height: 1.7;
+      margin-top: 8px;
+    }
+    .cta-box {
+      margin-top: 14px;
+      background: rgba(255,255,255,.04);
+      border: 1px solid rgba(255,255,255,.08);
+      border-radius: 14px;
+      padding: 14px;
+    }
+    .cta-title {
+      font-weight: 700;
+      font-size: 15px;
+      margin-bottom: 8px;
+    }
+    .cta-desc {
+      font-size: 13px;
+      color: #c9d6ee;
+      line-height: 1.7;
+      margin-bottom: 12px;
+    }
+    .invest-btn {
+      display: block;
+      width: 100%;
+      text-align: center;
+      padding: 12px 14px;
+      border-radius: 12px;
+      background: #2563eb;
+      color: white;
+      text-decoration: none;
+      font-weight: 700;
+      transition: .2s;
+    }
+    .invest-btn:hover {
+      background: #1d4ed8;
+    }
+    .foot {
+      margin-top: 28px;
+      color: #9fb0cf;
+      font-size: 13px;
+      line-height: 1.8;
+    }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <h1>금·원유·은·달러지수 실시간 차트/신호</h1>
+    <div class="sub">
+      최근 가격 흐름을 스파크라인 차트로 보여주고, 전일 종가 대비 변동률을 기준으로 자동 분석 문구와 상승/하락 신호를 제공합니다.
+    </div>
+    <div class="grid" id="grid"></div>
+    <div class="foot">
+      본 페이지는 참고용 정보입니다. 실제 투자 판단 전에는 관련 자산 구조와 리스크를 별도로 검토하세요. 무료 서버 특성상 첫 접속 시 로딩이 다소 느릴 수 있습니다.
+    </div>
+  </div>
+
+  <script>
+    function num(v) {
+      if (v === null || v === undefined) return '데이터 없음';
+      return new Intl.NumberFormat('ko-KR', { maximumFractionDigits: 2 }).format(v);
+    }
+
+    function changeText(v) {
+      if (v === null || v === undefined) return '데이터 없음';
+      return (v > 0 ? '+' : '') + v + '%';
+    }
+
+    function renderChart(item) {
+      if (!item.sparkline) {
+        return '<div class="chartbox"><div class="chartlabel">최근 24구간 차트</div><div class="meta">차트 데이터 없음</div></div>';
+      }
+      return `
+        <div class="chartbox">
+          <div class="chartlabel">최근 24구간 차트</div>
+          <svg viewBox="0 0 220 56" class="${item.badge}">
+            <polyline points="${item.sparkline}"></polyline>
+          </svg>
+        </div>
+      `;
+    }
+
+    function renderCTA(item) {
+      return `
+        <div class="cta-box">
+          <div class="cta-title">${item.cta.title}</div>
+          <div class="cta-desc">${item.cta.desc}</div>
+          <a class="invest-btn" href="${item.cta.link}">${item.cta.button}</a>
+        </div>
+      `;
+    }
+
+    function renderCard(item) {
+      return `
+        <div class="card">
+          <div class="top">
+            <div>
+              <div class="name">${item.name}</div>
+              <div class="symbol">${item.symbol}</div>
+            </div>
+            <div class="pill ${item.badge}">${item.signal}</div>
+          </div>
+
+          <div class="price">${num(item.price)}</div>
+          <div class="change">변동률: ${changeText(item.change_pct)}</div>
+
+          ${renderChart(item)}
+
+          <div class="analysis">${item.analysis}</div>
+          <div class="meta">
+            전일 종가: ${num(item.previous_close)}<br>
+            통화: ${item.currency ?? 'N/A'}
+          </div>
+
+          ${renderCTA(item)}
+        </div>
+      `;
+    }
+
+    async function load() {
+      try {
+        const r = await fetch('/api/signals');
+        const d = await r.json();
+        const items = [d.gold, d.oil, d.silver, d.dxy];
+        document.getElementById('grid').innerHTML = items.map(renderCard).join('');
+      } catch (e) {
+        document.getElementById('grid').innerHTML = '<div class="card">데이터를 불러오지 못했습니다.</div>';
+      }
+    }
+
+    load();
+    setInterval(load, 60000);
+  </script>
+</body>
+</html>
