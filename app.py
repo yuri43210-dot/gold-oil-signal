@@ -110,31 +110,17 @@ def auto_analysis(name, price, previous_close, change_pct_value, recent_trend):
 
 def get_cta(item_key, signal):
     if item_key == "gold":
-        if signal == "하락 우세":
-            return {
-                "title": "금 가격 하락 구간 대응 전략",
-                "desc": "금 가격이 약세일 때는 금 인버스 ETF, 달러 강세 관련 자산, 방어적 포트폴리오 전략을 함께 검토하는 투자자도 있습니다.",
-                "link": "/gold-forecast",
-                "button": "금값 전망·전략 보기"
-            }
         return {
-            "title": "금 가격 상승 구간 전략",
-            "desc": "금 가격이 강세일 때는 금 ETF, 금 채굴 기업, 안전자산 비중 확대 전략을 살펴볼 수 있습니다.",
+            "title": "금 가격 전망과 투자 전략",
+            "desc": "금 가격 흐름을 바탕으로 금 ETF, 금 채굴주, 인버스 전략 등 참고 아이디어를 정리했습니다.",
             "link": "/gold-forecast",
             "button": "금값 전망·전략 보기"
         }
 
     if item_key == "oil":
-        if signal == "상승 우세":
-            return {
-                "title": "국제유가 상승 수혜 전략",
-                "desc": "원유 가격 상승 시 에너지 ETF, 정유·탐사 기업, 원자재 비중 확대 전략을 참고하는 경우가 있습니다.",
-                "link": "/oil-forecast",
-                "button": "국제유가 전망·전략 보기"
-            }
         return {
-            "title": "국제유가 약세 대응 전략",
-            "desc": "원유 가격이 조정받을 때는 운송·항공 수혜 업종이나 유가 민감 업종의 흐름도 함께 살펴볼 수 있습니다.",
+            "title": "국제유가 전망과 투자 전략",
+            "desc": "유가 흐름에 따라 에너지 ETF, 정유주, 운송·항공 업종 등 연결 자산을 함께 볼 수 있습니다.",
             "link": "/oil-forecast",
             "button": "국제유가 전망·전략 보기"
         }
@@ -142,16 +128,77 @@ def get_cta(item_key, signal):
     if item_key == "silver":
         return {
             "title": "은 가격 전략 페이지",
-            "desc": "은은 귀금속과 산업재 성격을 함께 가지므로 금과 다른 방향으로 움직일 수 있어 분산 관점에서 함께 볼 만합니다.",
+            "desc": "은은 귀금속과 산업재 특성을 함께 가지기 때문에 금과는 다른 전략으로 볼 수 있습니다.",
             "link": "/silver-strategy",
             "button": "은 전략 보기"
         }
 
     return {
         "title": "달러지수 전략 페이지",
-        "desc": "달러지수는 금·원유 등 원자재 흐름과 반대로 움직이는 경우가 있어 함께 보면 시장 방향 파악에 도움이 됩니다.",
+        "desc": "달러지수는 원자재 흐름과 함께 보면 시장 방향을 해석하는 데 도움이 됩니다.",
         "link": "/dollar-strategy",
         "button": "달러 전략 보기"
+    }
+
+
+def get_asset_cta(item_key, signal):
+    if item_key == "gold":
+        if signal == "하락 우세":
+            return {
+                "title": "금 하락 시 참고할 수 있는 자산",
+                "desc": "달러 강세 수혜 자산, 금 인버스 ETF, 방어형 자산 아이디어를 정리한 페이지로 이동합니다.",
+                "link": "/gold-down-assets",
+                "button": "금 하락 추천 자산 보기"
+            }
+        if signal == "상승 우세":
+            return {
+                "title": "금 상승 시 함께 보는 자산",
+                "desc": "금 ETF, 금 채굴주, 안전자산 비중 전략 등 강세 구간 참고 자산을 정리했습니다.",
+                "link": "/gold-up-assets",
+                "button": "금 상승 추천 자산 보기"
+            }
+        return {
+            "title": "금 관망 구간 참고 자산",
+            "desc": "금이 뚜렷한 방향 없이 횡보할 때 확인할 수 있는 분산·관망 전략 페이지입니다.",
+            "link": "/gold-up-assets",
+            "button": "금 관련 자산 보기"
+        }
+
+    if item_key == "oil":
+        if signal == "상승 우세":
+            return {
+                "title": "유가 상승 시 수혜 자산",
+                "desc": "에너지 ETF, 정유주, 탐사·생산 기업 등 유가 상승 수혜 자산을 정리했습니다.",
+                "link": "/oil-up-assets",
+                "button": "유가 상승 추천 자산 보기"
+            }
+        if signal == "하락 우세":
+            return {
+                "title": "유가 하락 시 참고 자산",
+                "desc": "항공, 운송, 원가 절감 수혜 업종 등 유가 하락 구간 참고 자산을 정리했습니다.",
+                "link": "/oil-down-assets",
+                "button": "유가 하락 추천 자산 보기"
+            }
+        return {
+            "title": "유가 관망 구간 참고 자산",
+            "desc": "유가가 횡보할 때 확인할 수 있는 관련 업종과 분산 전략을 정리했습니다.",
+            "link": "/oil-up-assets",
+            "button": "유가 관련 자산 보기"
+        }
+
+    if item_key == "silver":
+        return {
+            "title": "은 가격 관련 참고 자산",
+            "desc": "은 ETF, 귀금속 분산, 산업재 수요 관련 관점으로 정리한 참고 페이지입니다.",
+            "link": "/silver-assets",
+            "button": "은 추천 자산 보기"
+        }
+
+    return {
+        "title": "달러 강세/약세 참고 자산",
+        "desc": "달러 강세·약세 구간에서 같이 보는 자산 아이디어를 정리한 참고 페이지입니다.",
+        "link": "/dollar-assets",
+        "button": "달러 추천 자산 보기"
     }
 
 
@@ -160,6 +207,7 @@ def build_item(item_key: str, name: str, symbol: str, slug: str):
     if not chart:
         signal = "데이터 없음"
         cta = get_cta(item_key, signal)
+        asset_cta = get_asset_cta(item_key, signal)
         return {
             "name": name,
             "symbol": symbol,
@@ -173,6 +221,7 @@ def build_item(item_key: str, name: str, symbol: str, slug: str):
             "analysis": f"{name} 가격 정보를 불러오지 못했습니다.",
             "sparkline": "",
             "cta": cta,
+            "asset_cta": asset_cta,
         }
 
     meta = chart.get("meta", {})
@@ -188,6 +237,7 @@ def build_item(item_key: str, name: str, symbol: str, slug: str):
     analysis = auto_analysis(name, price, previous_close, change_pct_value, recent_trend)
     sparkline = build_sparkline_points(last_24)
     cta = get_cta(item_key, signal_info["signal"])
+    asset_cta = get_asset_cta(item_key, signal_info["signal"])
 
     return {
         "name": name,
@@ -200,6 +250,7 @@ def build_item(item_key: str, name: str, symbol: str, slug: str):
         "analysis": analysis,
         "sparkline": sparkline,
         "cta": cta,
+        "asset_cta": asset_cta,
         **signal_info,
     }
 
@@ -219,6 +270,18 @@ def forecast_context(item_key: str, title: str, intro: str, sections: list[str])
         "item": item,
         "intro": intro,
         "sections": sections,
+        "all_items": items,
+    }
+
+
+def asset_page_context(item_key: str, title: str, intro: str, assets: list[dict]):
+    items = all_items()
+    item = items[item_key]
+    return {
+        "title": title,
+        "item": item,
+        "intro": intro,
+        "assets": assets,
         "all_items": items,
     }
 
@@ -301,6 +364,162 @@ def dollar_strategy():
                 "달러 강세는 원자재 가격에 부담이 되는 경우가 많아 금·원유와 함께 비교해 보는 것이 좋습니다.",
                 "달러 약세 국면에서는 위험자산 선호와 원자재 강세가 동시에 나타나는지 확인하는 투자자도 있습니다.",
                 "달러지수는 금리, 경기 기대, 안전자산 선호 심리에 영향을 받으므로 거시 변수와 함께 보는 것이 중요합니다."
+            ]
+        )
+    )
+
+
+@app.route("/gold-up-assets")
+def gold_up_assets():
+    return render_template(
+        "assets.html",
+        **asset_page_context(
+            "gold",
+            "금 상승 시 참고 자산 | 금 강세 구간 아이디어",
+            "금 가격이 강세일 때 함께 보는 자산과 전략 아이디어를 정리한 페이지입니다.",
+            [
+                {
+                    "name": "금 ETF",
+                    "desc": "금 가격 방향에 직접적으로 연동되는 대표적인 참고 자산입니다."
+                },
+                {
+                    "name": "금 채굴주",
+                    "desc": "금 가격 상승 시 실적 기대가 커질 수 있어 함께 주목받는 경우가 있습니다."
+                },
+                {
+                    "name": "안전자산 비중 확대",
+                    "desc": "포트폴리오 내 변동성 완화 목적으로 금 비중을 높이는 전략이 사용되기도 합니다."
+                }
+            ]
+        )
+    )
+
+
+@app.route("/gold-down-assets")
+def gold_down_assets():
+    return render_template(
+        "assets.html",
+        **asset_page_context(
+            "gold",
+            "금 하락 시 참고 자산 | 금 약세 구간 아이디어",
+            "금 가격이 약세일 때 참고하는 자산과 전략 아이디어를 정리한 페이지입니다.",
+            [
+                {
+                    "name": "금 인버스 ETF",
+                    "desc": "금 가격 하락 방향을 활용하는 구조의 상품을 참고하는 투자자도 있습니다."
+                },
+                {
+                    "name": "달러 강세 관련 자산",
+                    "desc": "금 약세 구간과 달러 강세 흐름이 함께 나타나는지 비교하는 전략이 있습니다."
+                },
+                {
+                    "name": "방어형 현금 비중",
+                    "desc": "방향성이 불리할 때는 현금 비중을 유지하며 다음 신호를 기다리는 방식도 사용됩니다."
+                }
+            ]
+        )
+    )
+
+
+@app.route("/oil-up-assets")
+def oil_up_assets():
+    return render_template(
+        "assets.html",
+        **asset_page_context(
+            "oil",
+            "유가 상승 시 수혜 자산 | 원유 강세 구간 아이디어",
+            "국제유가 상승 시 함께 참고할 수 있는 자산과 전략 아이디어를 정리한 페이지입니다.",
+            [
+                {
+                    "name": "에너지 ETF",
+                    "desc": "유가 상승 흐름과 함께 강세를 보일 수 있는 대표적인 참고 자산입니다."
+                },
+                {
+                    "name": "정유주",
+                    "desc": "정유 마진과 시장 기대가 반영되는 종목군으로 함께 비교하는 경우가 많습니다."
+                },
+                {
+                    "name": "탐사·생산 기업",
+                    "desc": "원유 가격 상승 시 수익성 기대가 커질 수 있는 업종입니다."
+                }
+            ]
+        )
+    )
+
+
+@app.route("/oil-down-assets")
+def oil_down_assets():
+    return render_template(
+        "assets.html",
+        **asset_page_context(
+            "oil",
+            "유가 하락 시 참고 자산 | 원유 약세 구간 아이디어",
+            "국제유가 하락 시 함께 참고할 수 있는 업종과 전략 아이디어를 정리한 페이지입니다.",
+            [
+                {
+                    "name": "항공주",
+                    "desc": "유류비 부담 완화 기대가 생길 수 있어 함께 비교하는 경우가 있습니다."
+                },
+                {
+                    "name": "운송주",
+                    "desc": "에너지 비용 하락이 원가 측면에서 긍정적일 수 있는 업종입니다."
+                },
+                {
+                    "name": "원가 절감 수혜 업종",
+                    "desc": "유가 하락이 비용 구조에 긍정적인 산업군을 함께 검토할 수 있습니다."
+                }
+            ]
+        )
+    )
+
+
+@app.route("/silver-assets")
+def silver_assets():
+    return render_template(
+        "assets.html",
+        **asset_page_context(
+            "silver",
+            "은 관련 참고 자산 | 은 가격 전략 아이디어",
+            "은 가격 흐름과 함께 참고하는 자산과 전략 아이디어를 정리한 페이지입니다.",
+            [
+                {
+                    "name": "은 ETF",
+                    "desc": "은 가격 흐름에 직접적으로 연결되는 대표 자산군입니다."
+                },
+                {
+                    "name": "귀금속 분산 전략",
+                    "desc": "금과 은을 함께 보는 분산 관점 전략이 사용되기도 합니다."
+                },
+                {
+                    "name": "산업 수요 관련 업종",
+                    "desc": "은은 산업재 성격도 있어 산업 수요와 함께 보는 해석이 가능합니다."
+                }
+            ]
+        )
+    )
+
+
+@app.route("/dollar-assets")
+def dollar_assets():
+    return render_template(
+        "assets.html",
+        **asset_page_context(
+            "dxy",
+            "달러지수 관련 참고 자산 | 달러 전략 아이디어",
+            "달러지수 흐름과 함께 참고하는 자산과 전략 아이디어를 정리한 페이지입니다.",
+            [
+                {
+                    "name": "달러 강세 수혜 자산",
+                    "desc": "달러 강세 환경에서 상대적으로 유리한 자산군을 함께 비교할 수 있습니다."
+                },
+                {
+                    "name": "원자재 반대 흐름 체크",
+                    "desc": "달러와 금·원유가 반대로 움직이는지 비교하면 시장 해석에 도움이 됩니다."
+                },
+                {
+                    "name": "환율 민감 자산",
+                    "desc": "달러 방향성에 민감한 자산군과 업종 흐름을 함께 보는 전략이 있습니다."
+                }
             ]
         )
     )
