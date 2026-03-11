@@ -74,21 +74,45 @@
       gap: 18px;
       margin-top: 20px;
     }
+    .asset-link {
+      text-decoration: none;
+      color: inherit;
+      display: block;
+    }
     .asset-card {
       background: #0a1837;
       border: 1px solid rgba(255,255,255,.08);
       border-radius: 20px;
       padding: 20px;
+      min-height: 140px;
+      transition: all .2s ease;
+      cursor: pointer;
+    }
+    .asset-link:hover .asset-card {
+      background: #10224a;
+      border-color: rgba(59,130,246,.55);
+      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(37,99,235,.18);
+    }
+    .asset-link:hover .asset-name {
+      color: #93c5fd;
     }
     .asset-name {
       font-size: 22px;
       font-weight: 700;
       margin-bottom: 10px;
+      transition: color .2s ease;
     }
     .asset-desc {
       line-height: 1.8;
       color: #d7e1f3;
       font-size: 15px;
+    }
+    .asset-go {
+      margin-top: 14px;
+      font-size: 13px;
+      color: #93c5fd;
+      font-weight: 700;
     }
     .ad-box {
       margin-top: 24px;
@@ -131,15 +155,18 @@
 
     <div class="grid">
       {% for asset in assets %}
-      <div class="asset-card">
-        <div class="asset-name">{{ asset.name }}</div>
-        <div class="asset-desc">{{ asset.desc }}</div>
-      </div>
+      <a class="asset-link" href="{{ asset.url }}" target="_blank" rel="noopener noreferrer">
+        <div class="asset-card">
+          <div class="asset-name">{{ asset.name }}</div>
+          <div class="asset-desc">{{ asset.desc }}</div>
+          <div class="asset-go">관련 페이지 보기 →</div>
+        </div>
+      </a>
       {% endfor %}
     </div>
 
     <div class="ad-box">
-      이 페이지는 추천 자산 상세 설명 아래 광고, 추천 글, 제휴 링크 영역으로 활용할 수 있습니다.
+      이 페이지는 추천 자산 설명 아래 광고, 추천 글, 제휴 링크 영역으로 활용할 수 있습니다.
     </div>
 
     <a class="home-btn" href="/">실시간 메인 페이지 보기</a>
